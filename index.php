@@ -72,9 +72,9 @@ if (isset($_POST['send'])) {
 
     <div class="follow">
       <a href="#" class="fab fa-facebook-f"></a>
-      <a href="#" class="fab fa-instagram"></a>
-      <a href="#" class="fab fa-linkedin"></a>
-      <a href="#" class="fab fa-github"></a>
+      <a href="https://www.instagram.com/__habijabiiiiee__/" class="fab fa-instagram"></a>
+      <a href="https://www.linkedin.com/in/mayesha-marzia-zaman-1464482a1/" class="fab fa-linkedin"></a>
+      <a href="https://github.com/Mashu-wq" class="fab fa-github"></a>
     </div>
   </header>
 
@@ -98,10 +98,7 @@ if (isset($_POST['send'])) {
     <h1 class="heading"><span>biography</span></h1>
     <div class="biography">
       <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Esse
-        voluptate optio reiciendis vel ut perspiciatis voluptates sed est
-        explicabo illum, consequatur, modi aliquam odit, et autem id? Alias,
-        quae blanditiis.
+        <?= $user_data['about_desc'] ?>
       </p>
       <div class="bio">
         <h3><span>name : </span>Mayesha Marzia</h3>
@@ -215,9 +212,43 @@ if (isset($_POST['send'])) {
   </section>
 
   <!-- services section starts-->
+
+  <?php
+  require('db.php');
+  $query_projects = "SELECT * FROM projects";
+  $run_projects = mysqli_query($db, $query_projects);
+
+  if ($run_projects) {
+    // Fetch all rows into an array
+    $data_projects = mysqli_fetch_all($run_projects, MYSQLI_ASSOC);
+  } else {
+    // Handle query failure, check for errors
+    echo "Query failed: " . mysqli_error($db);
+  }
+  ?>
+
+
   <section class="services" id="services">
-    <h1 class="heading"><span>services</span></h1>
+    <h1 class="heading"><span>Projects</span></h1>
     <div class="box-container">
+      <?php
+      foreach ($data_projects as $user_data_projects) {
+      ?>
+        <div class="box">
+          <img src="images/<?= $user_data_projects['project_image'] ?>" alt="">
+          <h4><?= $user_data_projects['project_title'] ?></h4>
+          <p><?= $user_data_projects['project_desc'] ?></p>
+          <a href="<?= $user_data_projects['project_link'] ?>"><i class='bx bx-link-external'></i></a>
+
+
+
+
+        </div>;
+      <?php
+      }
+      ?>
+
+      <!-- 
       <div class="box">
         <i class="fas fa-wordpress"></i>
         <h3>wordpress development</h3>
@@ -260,7 +291,7 @@ if (isset($_POST['send'])) {
           unde corporis? Enim, nesciunt fugiat! Quam qui excepturi officiis
           nostrum corrupti?
         </p>
-      </div>
+      </div> -->
     </div>
   </section>
   <section class="portfolio" id="portfolio">
@@ -295,7 +326,7 @@ if (isset($_POST['send'])) {
       </div>
       <input type="number" min="0" name="number" placeholder="enter your number" class="box" required />
       <textarea name="message" class="box" required placeholder="enter your message" cols="30" rows="10"></textarea>
-      <input type="submit" value="send message" name="send" class="btn" />
+      <input type="submit" value="send message" name="submit" class="btn" />
     </form>
 
     <!-- <div class="box-container">

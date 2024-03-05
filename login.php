@@ -1,34 +1,43 @@
+<!-- <span style="font-family: verdana, geneva, sans-serif;">
+-->
+
 <?php
+
 require('db.php');
 
-if (isset($_POST['submit'])) {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    // $email = mysqli_real_escape_string($db, $email);
-    // $password = mysqli_real_escape_string($db, $password);
-    $query = "SELECT * FROM admin WHERE email='$email' AND password='$password'";
-    $run = mysqli_query($db, $query);
-    $data = mysqli_fetch_array($run);
-    if (count($data) > 0) {
-        $_SESSION['isUserLoggedIn'] = true;
-        $_SESSION['emailId'] = $_POST['email'];
-
-        echo "<script>window.location.href= 'admin.php';</script>";
-    } else {
-        echo "<script>alert('Incorrect email id or password !')</script>";
+if (isset($_COOKIE['user_login'])) {
+    if ($_COOKIE['user_login'] === '1') {
+        header("Location:admin.php");
     }
+} else {
+    if (isset($_POST['submit'])) {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        // $remember_me = isset($_POST['remember_me']) ? true : false;
+        $query = "SELECT * FROM admin WHERE email='$email' && password='$password'";
+        $run = mysqli_query($db, $query);
+        $data = mysqli_fetch_array($run);
 
-    // if ($run && mysqli_num_rows($run) > 0) {
-    //     session_start();
-    //     $_SESSION['isUserLoggedIn'] = true;
-    //     $_SESSION['emailId'] = $email;
-    //     header("Location: admin.php");
-    //     exit;
-    // } else {
-    //     echo "<script>alert('Incorrect Email or Password!')</script>";
-    // }
+        if ($data !== null && count($data) > 0) {
+            setcookie('user_login', '1', time() + 3600);
+            $_SESSION['isUserLoddesIn'] = true;
+            $_SESSION['emailId'] = $_POST['email'];
+
+            if ($remember_me) {
+                setcookie('user_email', $_POST['email'], time() + (60 * 60));
+            } else {
+
+                setcookie('user_email', '', time() - 3600);
+            }
+
+            echo "<script>window.location.href='admin.php';</script>";
+        } else {
+            echo "<script>alert('Incorrect Email or Password!')</script>";
+        }
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <!DOCTYPE html>
